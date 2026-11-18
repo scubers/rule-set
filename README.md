@@ -16,4 +16,4 @@ RULE-SET,https://raw.githubusercontent.com/scubers/rule-set/main/shadowrocket/cl
 
 ### 使用 `lazy_group.conf` 的拓展配置
 
-[下载 local-extended.conf](https://raw.githubusercontent.com/scubers/rule-set/main/shadowrocket/local-extended.conf)。将它与已有的 `lazy_group.conf` 放在同一个 Shadowrocket 配置目录，在 `CLAUDE` 策略组里手动选择代理节点。远程 Claude 规则指向 `CLAUDE`，`router.com` 和 `nas.com` 走直连。
+[下载 local-extended.conf](https://raw.githubusercontent.com/scubers/rule-set/main/shadowrocket/local-extended.conf)。将它与已有的 `lazy_group.conf` 放在同一个 Shadowrocket 配置目录，在 Shadowrocket 首页选择代理节点，`CLAUDE` 通过内置 `PROXY` 使用该节点。远程 Claude 规则指向 `CLAUDE`，`router.com` 和 `nas.com` 走直连。
