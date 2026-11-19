@@ -2,6 +2,18 @@
 
 适用于 Shadowrocket 的分流规则。
 
+## OpenAI
+
+在现有配置的 `[Rule]` 里加入以下一行，按需把 `PROXY` 换成你的策略组名称。
+
+```ini
+RULE-SET,https://raw.githubusercontent.com/scubers/rule-set/main/shadowrocket/openai.list,PROXY
+```
+
+放在通用 AI、代理、GEOIP 和 FINAL 之前。首页「全局路由」选择「配置」。
+
+包含 ChatGPT、Codex、API、Sora 及登录验证域名。核心域名参考 [OpenAI 网络建议](https://help.openai.com/en/articles/9247338-network-recommendations-for-chatgpt-errors-on-web-and-apps)，动态 CDN 使用关键字规则，共享服务仅保留精确主机名。
+
 ## Claude
 
 在现有配置的 `[Rule]` 里加入以下一行，按需把 `Claude-Japan` 换成你的策略组名称。
