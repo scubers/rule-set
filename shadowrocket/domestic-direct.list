@@ -1,0 +1,7 @@
+# domestic-direct · Shadowrocket RULE-SET
+# 一些明知是国内域名但是却走到final proxy的，单独拎出来指定direct
+
+# 飞书
+DOMAIN-SUFFIX,larkoffice.com
+# 豆包
+DOMAIN-SUFFIX,doubao.com
