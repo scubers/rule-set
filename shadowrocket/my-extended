@@ -1,0 +1,31 @@
+# Shadowrocket: 2026-11-18 11:45:43
+[General]
+# lazy group conf: https://johnshall.github.io/Shadowrocket-ADBlock-Rules-Forever/lazy_group.conf
+include = lazy_group.conf
+
+# 命中 direct 的走系统 dns，不用走 doh
+dns-direct-system = true
+
+# 强制 doh
+dns-server = https://1.1.1.1/dns-query#proxy
+fallback-dns-server = https://1.0.0.1/dns-query#proxy
+
+# 禁用stun 下面这两行，必须配合 shadowrocket 的 设置 -> UDP -> 禁用 STUN！！！！！
+stun-response-ip =
+stun-response-ipv6 =
+
+[Proxy Group]
+CLAUDE = select,JP,use=true,policy-regex-filter=S1
+OPENAI = select,America,use=true,policy-regex-filter=S1
+
+[Rule]
+# 在「配置」模式下，从外网回家时在首页选择家庭 WireGuard 节点。
+DOMAIN-SUFFIX,router.com,DIRECT
+DOMAIN-SUFFIX,nas.com,DIRECT
+RULE-SET,https://raw.githubusercontent.com/scubers/rule-set/main/shadowrocket/claude.list,CLAUDE
+RULE-SET,https://raw.githubusercontent.com/scubers/rule-set/main/shadowrocket/openai.list,OPENAI
+RULE-SET,https://raw.githubusercontent.com/scubers/rule-set/main/shadowrocket/domestic-direct.list,DIRECT
+
+[Host]
+nas.com = 192.168.18.203
+router.com = 192.168.18.252
