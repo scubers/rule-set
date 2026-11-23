@@ -26,6 +26,15 @@ RULE-SET,https://raw.githubusercontent.com/scubers/rule-set/main/shadowrocket/cl
 
 域名基于 v2fly 的 Anthropic 列表，并补充 Claude 使用的精确主机名。IP 段按 Anthropic 公布的 API 和 Console 入站范围整理，核对于 2026-11-18。 [v2fly Anthropic 规则](https://github.com/v2fly/domain-list-community/blob/6766d09f4a951f4f11d822891a9736606cd910ac/data/anthropic) · [上游 MIT 许可证](LICENSE.v2fly) · [Anthropic 官方 IP 列表](https://platform.claude.com/docs/zh-CN/api/ip-addresses)
 
-### 使用 `lazy_group.conf` 的拓展配置
+## Shadowrocket 场景配置
 
-[下载 local-extended.conf](https://raw.githubusercontent.com/scubers/rule-set/main/shadowrocket/local-extended.conf)。将它与已有的 `lazy_group.conf` 放在同一个 Shadowrocket 配置目录，在 Shadowrocket 首页选择代理节点，`CLAUDE` 通过内置 `PROXY` 使用该节点。远程 Claude 规则指向 `CLAUDE`，`router.com` 和 `nas.com` 走直连。
+先在 Shadowrocket 中保留名为 `lazy_group.conf` 的[底层配置](https://johnshall.github.io/Shadowrocket-ADBlock-Rules-Forever/lazy_group.conf)，再导入两份扩展配置。两份都直接引用 `lazy_group.conf`，共用 DNS、Claude、OpenAI 和普通流量规则。
+
+| 场景 | 配置 | 家庭网络 |
+|---|---|---|
+| 家庭 Wi‑Fi | [extended-general.conf](shadowrocket/extended-general.conf) | `router.com` 和 `nas.com` 直连 |
+| 默认、蜂窝 | [extended-outside.conf](shadowrocket/extended-outside.conf) | `router.com`、`nas.com` 和 `192.168.18.0/24` 通过 `WIREGUARD-HOME` |
+
+在「首页 → 全局路由 → 场景设置」将家庭 Wi‑Fi 绑定通用版，将默认场景和已有的蜂窝场景绑定外出版。保存后将全局路由选为「场景」。外出版需要已有的 `WIREGUARD-HOME` 节点或策略组。
+
+共用配置只改 `extended-general.conf`，然后在仓库根目录运行 `python3 shadowrocket/generate-outside.py` 更新外出版。用 `python3 shadowrocket/generate-outside.py --check` 检查两份是否同步。维护外出专用的回家规则和旁路设置时，在生成器中修改。更新底层配置后，核对它的 `skip-proxy` 和 `tun-excluded-routes` 是否有变化。
