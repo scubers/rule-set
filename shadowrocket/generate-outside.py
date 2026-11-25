@@ -24,7 +24,7 @@ OUTSIDE_BYPASS = (
 def replace_line(config, line, replacement):
     lines = config.splitlines(keepends=True)
     if lines.count(line) != 1:
-        raise SystemExit(f'extended-general.conf 应恰好包含一行 {line.strip()}')
+        raise SystemExit(f'extended-home.conf 应恰好包含一行 {line.strip()}')
     lines[lines.index(line)] = replacement
     return ''.join(lines)
 
@@ -34,19 +34,19 @@ def main():
     parser.add_argument('--check', action='store_true', help='检查外出配置是否与生成结果一致')
     args = parser.parse_args()
 
-    general = (CONFIG_DIR / 'extended-general.conf').read_text(encoding='utf-8')
+    general = (CONFIG_DIR / 'extended-home.conf').read_text(encoding='utf-8')
     if len(re.findall(r'(?im)^\s*include\s*=', general)) != 1:
-        raise SystemExit('extended-general.conf 应只引用 lazy_group.conf')
+        raise SystemExit('extended-home.conf 应只引用 lazy_group.conf')
     if re.search(r'(?im)^\s*(skip-proxy|tun-excluded-routes)\s*=', general):
         raise SystemExit('通用配置改了旁路列表，请同步核对生成器中的外出旁路设置')
 
     outside = replace_line(general, '[General]\n', '[General]\n# 由 generate-outside.py 生成。\n')
     outside = replace_line(outside, BASE_INCLUDE, BASE_INCLUDE + OUTSIDE_BYPASS)
-    outside = replace_line(outside, 'DOMAIN-SUFFIX,router.com,DIRECT\n', 'DOMAIN-SUFFIX,router.com,WIREGUARD-HOME\n')
+    outside = replace_line(outside, 'DOMAIN-SUFFIX,jr-router.com,DIRECT\n', 'DOMAIN-SUFFIX,jr-router.com,WIREGUARD-HOME\n')
     outside = replace_line(
         outside,
-        'DOMAIN-SUFFIX,nas.com,DIRECT\n',
-        'DOMAIN-SUFFIX,nas.com,WIREGUARD-HOME\nIP-CIDR,192.168.18.0/24,WIREGUARD-HOME,no-resolve\n',
+        'DOMAIN-SUFFIX,jr-nas.com,DIRECT\n',
+        'DOMAIN-SUFFIX,jr-nas.com,WIREGUARD-HOME\nIP-CIDR,192.168.18.0/24,WIREGUARD-HOME,no-resolve\n',
     )
 
     output = CONFIG_DIR / 'extended-outside.conf'
